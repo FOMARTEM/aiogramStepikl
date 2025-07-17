@@ -41,10 +41,11 @@ async def command_start_handler(message: Message) -> None:
     """
     This handler receives messages with `/start` command
     """
-    await message.answer('Привет! Я бот "Угадай Число".'
-                         'Предлагаю поиграть со мной)\n'
-                         'Отправь /help что бы ознакомиться с правилами',
-                        reply_markup=keyboard
+    await message.answer(
+        'Привет! Я бот "Угадай Число".'
+        'Предлагаю поиграть со мной)\n'
+        'Отправь /help что бы ознакомиться с правилами',
+        reply_markup=keyboard
     )
 
 @dp.message(Command(commands='help'))
@@ -52,14 +53,16 @@ async def command_help_handler(message: Message) -> None :
     """
     This handler receives messages with `/help` command
     """
-    await message.answer('Команды:\n'
-                         '/start - перезапуск бота\n'     
-                         '/cancel - выход из текущей игры\n'
-                         '/help - вывод руководства пользователя\n'
-                         'Правила игры\n'
-                         'Я загадываю число, а Вы пытаетесь угадать его,'
-                         'в случае если не угадываете я даю подсказку, больше или меньше.\n'
-                         'Что бы сыграть нажмите на кнопку Сыграем'
+    await message.answer(
+        'Команды:\n'
+        '/start - перезапуск бота\n'     
+        '/cancel - выход из текущей игры\n'
+        '/help - вывод руководства пользователя\n'
+        'Правила игры\n'
+        'Я загадываю число, а Вы пытаетесь угадать его,'
+        'в случае если не угадываете я даю подсказку, больше или меньше.\n'
+        'Что бы сыграть нажмите на кнопку Сыграем',
+        reply_markup=keyboard
     )
 
 @dp.message(Command(commands='cancel'))
@@ -77,7 +80,7 @@ async def command_cancel_handler(message: Message) -> None:
         'В случае если решите сыграть ещё раз нажимте на кнопку Сыграем',
         reply_markup=keyboard
     )
-        
+
 
 
 
