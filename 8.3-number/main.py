@@ -24,6 +24,18 @@ keyboard = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
+# Якобы глобальные переменные
+# Побед
+wins = 0
+# Попыток
+attemps = 0
+# Игр
+games = 0
+# Загаданное число
+magic_number = 0
+#Состояние
+in_game = False
+
 @dp.message(Command(commands='start'))
 async def command_start_handler(message: Message) -> None:
     """
@@ -49,6 +61,26 @@ async def command_help_handler(message: Message) -> None :
                          'в случае если не угадываете я даю подсказку, больше или меньше.\n'
                          'Что бы сыграть нажмите на кнопку Сыграем'
     )
+
+@dp.message(Command(commands='cancel'))
+async def command_cancel_handler(message: Message) -> None:
+    """
+    This handler receives messages with `/cancel` command
+    """
+    if in_game:
+        attemps = 0
+        magic_number = 0
+        games+=1
+    
+    await message.answer(
+        'Спасибо за игру!\n'
+        'В случае если решите сыграть ещё раз нажимте на кнопку Сыграем',
+        reply_markup=keyboard
+    )
+        
+
+
+
 
 if __name__ == '__main__':
     dp.run_polling(bot)
