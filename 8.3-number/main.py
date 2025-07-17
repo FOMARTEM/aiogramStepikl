@@ -101,6 +101,7 @@ async def start_game(message: Message) -> None:
     in_game = True
     games+=1
     magic_number = randint(1, 100)
+    print(magic_number)
     await message.answer(
         'Я загадал число!\n'
         'Если захочешь завершить игру отправь /cancel',
@@ -128,6 +129,32 @@ async def next_time(message: Message) -> None:
         'Если запутался отправь /help'
     )
 
+@dp.message(F.text.regexp(r'^(100|[1-9][0-9]?)$'))
+async def get_number(message: Message) -> None:
+    """
+    This handler receives messages with numbers
+    """
+    global in_game, games, magic_number, attemps, wins
+    if in_game == False:
+        await message.answer('Мы ещё не начали играть(')
+        return
+    
+    if int(message.text) == magic_number:
+        attemps+=1
+        in_game = False
+        wins+=1
+        magic_number = 0
+        await message.answer(
+            f"Поздравляем, Вы угадали число с {attemps} попытки\n"
+            f"Ваша статистика: {wins}/{games}"
+        )
+    elif int(message.text) > magic_number:
+        attemps+=1
+        await message.answer('Не угодали, я загадал число меньше')
+    else:
+        attemps+=1
+        await message.answer('Не угодали, я загадал число больше')
+    
 
 
 if __name__ == '__main__':
