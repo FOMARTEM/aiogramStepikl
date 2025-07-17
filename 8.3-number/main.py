@@ -107,6 +107,26 @@ async def start_game(message: Message) -> None:
         reply_markup=ReplyKeyboardRemove()
     )
 
+@dp.message(F.text == 'В другой раз')
+async def next_time(message: Message) -> None:
+    """
+    This handler receives messages with `В другой раз', for start game
+    """
+
+    global in_game
+
+    if in_game:
+        await message.answer(
+            'Вы находитеся в игре\n'
+            'Необходимо закончить игру /cancel'
+        )
+        return
+    
+    await message.answer(
+        'Буду ждать тебя!\n'
+        'Если надумешь поиграть нажми кнопку Сыграем\n'
+        'Если запутался отправь /help'
+    )
 
 
 
