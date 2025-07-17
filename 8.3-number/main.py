@@ -155,7 +155,15 @@ async def get_number(message: Message) -> None:
         attemps+=1
         await message.answer('Не угодали, я загадал число больше')
     
-
+@dp.message()
+async def wrong_message(message: Message):
+    global in_game
+    if in_game:
+        await message.answer('Вы сейчас играете, пришлите число,'
+                             ' либо для завершения игры команду /cancel'
+        )
+        return
+    await message.answer('Я умею только играть, не ломай меня')
 
 if __name__ == '__main__':
     dp.run_polling(bot)
