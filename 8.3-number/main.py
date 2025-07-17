@@ -36,7 +36,7 @@ attemps = 0
 games = 0
 # Загаданное число
 magic_number = 0
-#Состояние
+# Состояние
 in_game = False
 
 @dp.message(Command(commands='start'))
