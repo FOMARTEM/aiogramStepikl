@@ -21,6 +21,20 @@ async def command_start_handler(message: Message) -> None:
                          'Отправь /help что бы ознакомиться с правилами'
     )
 
+@dp.message(Command(commands='help'))
+async def command_help_handler(message: Message) -> None :
+    """
+    This handler receives messages with `/help` command
+    """
+    await message.answer('Команды:\n'
+                         '/start - перезапуск бота\n'     
+                         '/cancel - выход из текущей игры\n'
+                         '/help - вывод руководства пользователя\n'
+                         'Правила игры\n'
+                         'Я загадываю число, а Вы пытаетесь угадать его,'
+                         'в случае если не угадываете я даю подсказку, больше или меньше.\n'
+                         'Что бы сыграть нажмите на кнопку Сыграем'
+    )
 
 if __name__ == '__main__':
     dp.run_polling(bot)
