@@ -45,7 +45,7 @@ async def command_start_handler(message: Message) -> None:
     This handler receives messages with `/start` command
     """
     await message.answer(
-        'Привет! Я бот "Угадай Число".'
+        'Привет! Я бот "Угадай Число". '
         'Предлагаю поиграть со мной)\n'
         'Отправь /help что бы ознакомиться с правилами',
         reply_markup=keyboard
@@ -62,7 +62,7 @@ async def command_help_handler(message: Message) -> None :
         '/cancel - выход из текущей игры\n'
         '/help - вывод руководства пользователя\n'
         'Правила игры\n'
-        'Я загадываю число, а Вы пытаетесь угадать его,'
+        'Я загадываю число, а Вы пытаетесь угадать его, '
         'в случае если не угадываете я даю подсказку, больше или меньше.\n'
         'Что бы сыграть нажмите на кнопку Сыграем',
         reply_markup=keyboard
@@ -102,7 +102,7 @@ async def start_game(message: Message) -> None:
     games+=1
     magic_number = randint(1, 100)
     await message.answer(
-        'Я загадал число!'
+        'Я загадал число!\n'
         'Если захочешь завершить игру отправь /cancel',
         reply_markup=ReplyKeyboardRemove()
     )
