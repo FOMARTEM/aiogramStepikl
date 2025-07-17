@@ -1,6 +1,10 @@
 from aiogram import Bot, Dispatcher
 from aiogram.filters import Command
-from aiogram.types import Message
+from aiogram.types import (
+    KeyboardButton, 
+    Message, 
+    ReplyKeyboardMarkup
+)
 from aiogram import F
 
 from config_reader import config
@@ -10,6 +14,15 @@ token = config.bot_token.get_secret_value()
 bot = Bot(token=token)
 dp = Dispatcher()
 
+# Стандартная клавиатура для всей игры
+kb = [
+    [KeyboardButton(text="Сыграем")],
+    [KeyboardButton(text="В другой раз")]
+]
+keyboard = ReplyKeyboardMarkup(
+    keyboard=kb,
+    resize_keyboard=True
+)
 
 @dp.message(Command(commands='start'))
 async def command_start_handler(message: Message) -> None:
@@ -18,7 +31,8 @@ async def command_start_handler(message: Message) -> None:
     """
     await message.answer('Привет! Я бот "Угадай Число".'
                          'Предлагаю поиграть со мной)\n'
-                         'Отправь /help что бы ознакомиться с правилами'
+                         'Отправь /help что бы ознакомиться с правилами',
+                        reply_markup=keyboard
     )
 
 @dp.message(Command(commands='help'))
