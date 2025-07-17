@@ -86,6 +86,26 @@ async def command_cancel_handler(message: Message) -> None:
         reply_markup=keyboard
     )
 
+@dp.message(F.text == 'Сыграем')
+async def start_game(message: Message) -> None:
+    """
+    This handler receives messages with `Сыграем', for start game
+    """
+    global in_game, games, magic_number
+    if in_game:
+        await message.answer(
+            'Вы уже находитеся в игре\n'
+            'Что бы звершить текущую игру отправьте /cancel'
+        )
+        return
+    in_game = True
+    games+=1
+    magic_number = randint(1, 100)
+    await message.answer(
+        'Я загадал число!'
+        'Если захочешь завершить игру отправь /cancel',
+        reply_markup=ReplyKeyboardRemove()
+    )
 
 
 
