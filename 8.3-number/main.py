@@ -3,9 +3,12 @@ from aiogram.filters import Command
 from aiogram.types import (
     KeyboardButton, 
     Message, 
-    ReplyKeyboardMarkup
+    ReplyKeyboardMarkup,
+    ReplyKeyboardRemove
 )
 from aiogram import F
+
+from random import randint
 
 from config_reader import config
 
@@ -70,10 +73,12 @@ async def command_cancel_handler(message: Message) -> None:
     """
     This handler receives messages with `/cancel` command
     """
+    global in_game, games, magic_number, attemps
     if in_game:
         attemps = 0
         magic_number = 0
         games+=1
+        in_game = False
     
     await message.answer(
         'Спасибо за игру!\n'
