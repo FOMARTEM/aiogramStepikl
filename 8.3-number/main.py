@@ -1,5 +1,5 @@
 from aiogram import Bot, Dispatcher
-from aiogram.filters import Command
+from aiogram.filters import Command, CommandStart
 from aiogram.types import (
     KeyboardButton, 
     Message, 
@@ -36,7 +36,7 @@ user = {
 }
 
 
-@dp.message(Command(commands='start'))
+@dp.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
     """
     This handler receives messages with `/start` command
@@ -48,6 +48,18 @@ async def command_start_handler(message: Message) -> None:
         reply_markup=keyboard
     )
 
+@dp.message(Command(commands='stat'))
+async def command_help_handler(message: Message) -> None :
+    """
+    This handler receives messages with `/start` command
+    """
+    await message.answer(
+        f'Всего игр сыграно: {user["games"]}\n'
+        f'Игр выиграно: {user["wins"]}',
+        reply_markup=keyboard
+    )
+
+
 @dp.message(Command(commands='help'))
 async def command_help_handler(message: Message) -> None :
     """
@@ -57,11 +69,12 @@ async def command_help_handler(message: Message) -> None :
         'Команды:\n'
         '/start - перезапуск бота\n'     
         '/cancel - выход из текущей игры\n'
+        '/stat - статистика игр\n'
         '/help - вывод руководства пользователя\n'
-        'Правила игры\n'
+        'Правила игры:\n'
         'Я загадываю число от 1 до 100, а Вы пытаетесь угадать его, '
         'в случае если не угадываете я даю подсказку, больше или меньше.\n'
-        'Что бы сыграть нажмите на кнопку Сыграем',
+        'Что бы сыграть нажмите на кнопку "Сыграем"',
         reply_markup=keyboard
     )
 
@@ -73,12 +86,11 @@ async def command_cancel_handler(message: Message) -> None:
     if user["in_game"]:
         user["attemps"] = 0
         user["magic_numbe"] = 0
-        user["games"] += 1
         user["in_game"] = False
     
     await message.answer(
         'Спасибо за игру!\n'
-        'В случае если решите сыграть ещё раз нажимте на кнопку Сыграем',
+        'В случае если решите сыграть ещё раз нажимте на кнопку "Сыграем"',
         reply_markup=keyboard
     )
 
@@ -90,7 +102,7 @@ async def start_game(message: Message) -> None:
 
     if user["in_game"]:
         await message.answer(
-            'Вы уже находитеся в игре\n'
+            'Вы уже находитесь в игре\n'
             'Что бы звершить текущую игру отправьте /cancel'
         )
         return
@@ -113,14 +125,14 @@ async def next_time(message: Message) -> None:
 
     if user["in_game"]:
         await message.answer(
-            'Вы находитеся в игре\n'
+            'Вы находитесь в игре\n'
             'Необходимо закончить игру /cancel'
         )
         return
     
     await message.answer(
         'Буду ждать тебя!\n'
-        'Если надумешь поиграть нажми кнопку Сыграем\n'
+        'Если надумешь поиграть нажми кнопку "Сыграем"\n'
         'Если запутался отправь /help'
     )
 
@@ -146,9 +158,9 @@ async def get_number(message: Message) -> None:
             reply_markup=keyboard
         )
     elif int(message.text) > user["magic_numbe"]:
-        await message.answer('Не угодали, я загадал число меньше')
+        await message.answer('Не угадали, я загадал число меньше')
     else:
-        await message.answer('Не угодали, я загадал число больше')
+        await message.answer('Не угадали, я загадал число больше')
     
 @dp.message()
 async def wrong_message(message: Message):
@@ -157,7 +169,7 @@ async def wrong_message(message: Message):
                              ' либо для завершения игры команду /cancel'
         )
         return
-    await message.answer('Я умею только играть, не ломай меня')
+    await message.answer('Я умею только играть, не ломай меня, прочитай правила /help')
 
 if __name__ == '__main__':
     dp.run_polling(bot)
