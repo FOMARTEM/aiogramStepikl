@@ -36,7 +36,7 @@ user = {
 }
 
 
-@dp.message(CommandStart)
+@dp.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
     """
     This handler receives messages with `/start` command
@@ -48,7 +48,7 @@ async def command_start_handler(message: Message) -> None:
         reply_markup=keyboard
     )
 
-@dp.message(Command(commands='start'))
+@dp.message(Command(commands='stat'))
 async def command_help_handler(message: Message) -> None :
     """
     This handler receives messages with `/start` command
@@ -69,6 +69,7 @@ async def command_help_handler(message: Message) -> None :
         'Команды:\n'
         '/start - перезапуск бота\n'     
         '/cancel - выход из текущей игры\n'
+        '/stat - статистика игр\n'
         '/help - вывод руководства пользователя\n'
         'Правила игры:\n'
         'Я загадываю число от 1 до 100, а Вы пытаетесь угадать его, '
