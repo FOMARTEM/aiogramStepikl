@@ -1,5 +1,5 @@
 from aiogram import Bot, Dispatcher
-from aiogram.filters import Command
+from aiogram.filters import Command, CommandStart
 from aiogram.types import (
     KeyboardButton, 
     Message, 
@@ -36,7 +36,7 @@ user = {
 }
 
 
-@dp.message(Command(commands='start'))
+@dp.message(CommandStart)
 async def command_start_handler(message: Message) -> None:
     """
     This handler receives messages with `/start` command
@@ -47,6 +47,18 @@ async def command_start_handler(message: Message) -> None:
         'Отправь /help что бы ознакомиться с правилами',
         reply_markup=keyboard
     )
+
+@dp.message(Command(commands='start'))
+async def command_help_handler(message: Message) -> None :
+    """
+    This handler receives messages with `/start` command
+    """
+    await message.answer(
+        f'Всего игр сыграно: {user["games"]}\n'
+        f'Игр выиграно: {user["wins"]}',
+        reply_markup=keyboard
+    )
+
 
 @dp.message(Command(commands='help'))
 async def command_help_handler(message: Message) -> None :
