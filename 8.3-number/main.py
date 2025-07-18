@@ -27,17 +27,14 @@ keyboard = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
-# Якобы глобальные переменные
-# Побед
-wins = 0
-# Попыток
-attemps = 0
-# Игр
-games = 0
-# Загаданное число
-magic_number = 0
-# Состояние
-in_game = False
+user = {
+    'in_game' : False,
+    'magic_number' : None,
+    'attemps' : None,
+    'games' : 0,
+    'wins' : 0
+}
+
 
 @dp.message(Command(commands='start'))
 async def command_start_handler(message: Message) -> None:
@@ -62,7 +59,7 @@ async def command_help_handler(message: Message) -> None :
         '/cancel - выход из текущей игры\n'
         '/help - вывод руководства пользователя\n'
         'Правила игры\n'
-        'Я загадываю число, а Вы пытаетесь угадать его, '
+        'Я загадываю число от 1 до 100, а Вы пытаетесь угадать его, '
         'в случае если не угадываете я даю подсказку, больше или меньше.\n'
         'Что бы сыграть нажмите на кнопку Сыграем',
         reply_markup=keyboard
@@ -73,12 +70,11 @@ async def command_cancel_handler(message: Message) -> None:
     """
     This handler receives messages with `/cancel` command
     """
-    global in_game, games, magic_number, attemps
-    if in_game:
-        attemps = 0
-        magic_number = 0
-        games+=1
-        in_game = False
+    if user["in_game"]:
+        user["attemps"] = 0
+        user["magic_numbe"] = 0
+        user["games"] += 1
+        user["in_game"] = False
     
     await message.answer(
         'Спасибо за игру!\n'
@@ -91,17 +87,18 @@ async def start_game(message: Message) -> None:
     """
     This handler receives messages with `Сыграем', for start game
     """
-    global in_game, games, magic_number
-    if in_game:
+
+    if user["in_game"]:
         await message.answer(
             'Вы уже находитеся в игре\n'
             'Что бы звершить текущую игру отправьте /cancel'
         )
         return
-    in_game = True
-    games+=1
-    magic_number = randint(1, 100)
-    print(magic_number)
+    user["in_game"] = True
+    user["games"] += 1
+    user["magic_numbe"] = randint(1, 100)
+    user["attemps"] = 0
+    print(user["magic_numbe"])
     await message.answer(
         'Я загадал число!\n'
         'Если захочешь завершить игру отправь /cancel',
@@ -114,9 +111,7 @@ async def next_time(message: Message) -> None:
     This handler receives messages with `В другой раз', for start game
     """
 
-    global in_game
-
-    if in_game:
+    if user["in_game"]:
         await message.answer(
             'Вы находитеся в игре\n'
             'Необходимо закончить игру /cancel'
@@ -134,31 +129,30 @@ async def get_number(message: Message) -> None:
     """
     This handler receives messages with numbers
     """
-    global in_game, games, magic_number, attemps, wins
-    if in_game == False:
+
+    if not user["in_game"]:
         await message.answer('Мы ещё не начали играть(')
         return
     
-    if int(message.text) == magic_number:
-        attemps+=1
-        in_game = False
-        wins+=1
-        magic_number = 0
+    user["attemps"] += 1
+
+    if int(message.text) == user["magic_numbe"]:
+        user["in_game"] = False
+        user["wins"]+=1
+        user["magic_numbe"] = 0
         await message.answer(
-            f"Поздравляем, Вы угадали число с {attemps} попытки\n"
-            f"Ваша статистика: {wins}/{games}"
+            f"Поздравляем, Вы угадали число с {user["attemps"]} попытки\n"
+            f"Ваша статистика: {user["wins"]}/{user["games"]}",
+            reply_markup=keyboard
         )
-    elif int(message.text) > magic_number:
-        attemps+=1
+    elif int(message.text) > user["magic_numbe"]:
         await message.answer('Не угодали, я загадал число меньше')
     else:
-        attemps+=1
         await message.answer('Не угодали, я загадал число больше')
     
 @dp.message()
 async def wrong_message(message: Message):
-    global in_game
-    if in_game:
+    if user["in_game"]:
         await message.answer('Вы сейчас играете, пришлите число,'
                              ' либо для завершения игры команду /cancel'
         )
