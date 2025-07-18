@@ -59,7 +59,7 @@ async def command_help_handler(message: Message) -> None :
         '/cancel - выход из текущей игры\n'
         '/help - вывод руководства пользователя\n'
         'Правила игры\n'
-        'Я загадываю число, а Вы пытаетесь угадать его, '
+        'Я загадываю число от 1 до 100, а Вы пытаетесь угадать его, '
         'в случае если не угадываете я даю подсказку, больше или меньше.\n'
         'Что бы сыграть нажмите на кнопку Сыграем',
         reply_markup=keyboard
@@ -142,7 +142,8 @@ async def get_number(message: Message) -> None:
         user["magic_numbe"] = 0
         await message.answer(
             f"Поздравляем, Вы угадали число с {user["attemps"]} попытки\n"
-            f"Ваша статистика: {user["wins"]}/{user["games"]}"
+            f"Ваша статистика: {user["wins"]}/{user["games"]}",
+            reply_markup=keyboard
         )
     elif int(message.text) > user["magic_numbe"]:
         await message.answer('Не угодали, я загадал число меньше')
